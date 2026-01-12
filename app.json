@@ -4,10 +4,7 @@
     "slug": "industrial-asset-health-monitor",
     "version": "1.0.0",
     "scheme": "industrial-asset-health-monitor",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -20,6 +17,15 @@
         {
           "cameraPermissionText": "$(IAHL) needs access to your Camera.",
           "microphonePermissionText": "$(IAHL) needs access to your Microphone."
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "ndkVersion": "26.1.10909125",
+            "buildToolsVersion": "34.0.0"
+          }
         }
       ]
     ],
@@ -35,9 +41,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -46,13 +50,12 @@
       "bundleIdentifier": "com.edmirsoares.industrialassethealthmonitor"
     },
     "android": {
+      "newArchEnabled": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.CAMERA"
-      ],
+      "permissions": ["android.permission.CAMERA"],
       "package": "com.edmirsoares.industrialassethealthmonitor"
     }
   }
