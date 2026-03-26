@@ -45,7 +45,7 @@ export const darkColors = {
 
   feature: {
     scan: {
-      accent: '#00E5FF',
+      accent: '#202020ff',
       overlay: 'rgba(0, 0, 0, 0.7)',
     },
     ai: {

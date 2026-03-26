@@ -45,7 +45,7 @@ export const colors = {
 
   feature: {
     scan: {
-      accent: '#00E5FF',
+      accent: '#bcbcbc8e',
       overlay: 'rgba(0, 0, 0, 0.3)',
     },
     ai: {
