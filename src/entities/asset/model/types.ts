@@ -1,5 +1,7 @@
 export type AssetStatus = 'normal' | 'warning' | 'critical' | 'offline';
 
+export type AssetType = 'compressor' | 'motor' | 'pump' | 'generic';
+
 export type SensorType = 'vibration' | 'temperature' | 'pressure' | 'rpm' | 'current';
 
 export interface Asset {
@@ -9,6 +11,7 @@ export interface Asset {
   status: AssetStatus;
   threshold: number;
   lastCheck?: string;
+  type?: AssetType;
 }
 
 export interface TelemetryReading {
