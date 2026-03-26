@@ -38,6 +38,8 @@ export const useStatusColorByType = (status: 'normal' | 'warning' | 'critical' |
   }, [status, colors]);
 };
 
+export const useTextColor = () => useThemeStore((state) => state.colors.text);
+
 export const useThemeSpacing = () => useThemeStore((state) => state.spacing);
 
 export const useThemeFontSize = () => useThemeStore((state) => state.fontSize);

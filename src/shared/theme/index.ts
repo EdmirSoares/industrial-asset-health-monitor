@@ -13,6 +13,7 @@ export {
   useThemeFontSize,
   useThemeBorderRadius,
   useThemeShadows,
+  useTextColor,
 } from './useTheme';
 
 export { useThemeStore } from './themeStore';
