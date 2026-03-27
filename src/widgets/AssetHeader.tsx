@@ -1,0 +1,92 @@
+import { useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
+import { Ionicons } from '@expo/vector-icons';
+import { useThemeColors } from '@/src/shared/theme';
+import { AssetStatus } from '@/src/entities/asset/model/types';
+import { getStatusLabel } from '@/src/shared/lib/formatters';
+
+interface AssetHeaderProps {
+  name: string;
+  assetId: string;
+  location?: string;
+  status: AssetStatus;
+  onBack: () => void;
+}
+
+export function AssetHeader({ name, assetId, location, status, onBack }: AssetHeaderProps) {
+  const colors = useThemeColors();
+  const pulseOpacity = useSharedValue(1);
+
+  const statusColorMap: Record<AssetStatus, string> = {
+    normal: colors.status.success,
+    warning: colors.status.warning,
+    critical: colors.status.error,
+    offline: colors.neutral.gray500,
+  };
+
+  const statusColor = statusColorMap[status];
+
+  useEffect(() => {
+    pulseOpacity.value = withRepeat(
+      withSequence(withTiming(0.25, { duration: 700 }), withTiming(1, { duration: 700 })),
+      -1,
+    );
+  }, []);
+
+  const pulseStyle = useAnimatedStyle(() => ({ opacity: pulseOpacity.value }));
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={onBack}
+        style={styles.backButton}
+        hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}>
+        <Ionicons name="arrow-back" size={26} color={colors.text.primary} />
+      </TouchableOpacity>
+
+      <View style={styles.content}>
+        <Text style={[styles.name, { color: colors.text.primary }]} numberOfLines={1}>
+          {name}
+        </Text>
+        <Text style={[styles.id, { color: colors.text.secondary }]}>ID: {assetId}</Text>
+        {location ? (
+          <Text style={[styles.location, { color: colors.text.disabled }]}>{location}</Text>
+        ) : null}
+      </View>
+
+      <View style={styles.statusBlock}>
+        <Animated.View
+          style={[styles.statusDot, { backgroundColor: statusColor }, pulseStyle]}
+        />
+        <Text style={[styles.statusLabel, { color: statusColor }]}>
+          {getStatusLabel(status)}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    gap: 10,
+  },
+  backButton: { padding: 4 },
+  content: { flex: 1 },
+  name: { fontSize: 19, fontWeight: '700', marginBottom: 1 },
+  id: { fontSize: 13 },
+  location: { fontSize: 12, marginTop: 1 },
+  statusBlock: { alignItems: 'center', gap: 5 },
+  statusDot: { width: 10, height: 10, borderRadius: 5 },
+  statusLabel: { fontSize: 10, fontWeight: '700', letterSpacing: 0.4 },
+});
