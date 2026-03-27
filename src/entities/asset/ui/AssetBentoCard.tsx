@@ -1,5 +1,5 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import { useThemeColors, useThemeMode } from '@/src/shared/theme';
 import { SOFT_SHADOW } from '@/src/shared/ui/shadows';
 import { getStatusLabel } from '@/src/shared/lib/formatters';
@@ -34,32 +34,30 @@ export function AssetBentoCard({ asset, onPress }: AssetBentoCardProps) {
       activeOpacity={0.82}>
 
       <View style={styles.topRow}>
-        <View style={[styles.iconCircle, { backgroundColor: sc + '18' }]}>
-          <Ionicons name={icon} size={16} color={sc} />
-        </View>
-        <Ionicons name="chevron-forward" size={14} color={colors.text.disabled} />
+        <Feather name="chevron-right" size={48} color={colors.primary.main + '40'} />
       </View>
-
-      <Text style={[styles.name, { color: colors.text.primary }]} numberOfLines={2}>
-        {asset.name}
-      </Text>
-
-      <Text style={[styles.id, { color: colors.text.disabled }]}>
-        {asset.id}
-      </Text>
-
-      {isFull && asset.location ? (
-        <Text style={[styles.location, { color: colors.text.secondary }]} numberOfLines={1}>
-          {asset.location}
+      <View style={styles.content}>
+        <Text style={[styles.name, { color: colors.text.primary }]} numberOfLines={2}>
+          {asset.name}
         </Text>
-      ) : null}
 
-      <View style={styles.footer}>
-        <View style={[styles.statusPill, { backgroundColor: sc + '18' }]}>
-          <View style={[styles.statusDot, { backgroundColor: sc }]} />
-          <Text style={[styles.statusText, { color: sc }]}>
-            {getStatusLabel(asset.status)}
+        <Text style={[styles.id, { color: colors.text.primary + '80' }]}>
+          {asset.id}
+        </Text>
+
+        {isFull && asset.location ? (
+          <Text style={[styles.location, { color: colors.text.secondary }]} numberOfLines={1}>
+            {asset.location}
           </Text>
+        ) : null}
+
+        <View style={styles.footer}>
+          <View style={[styles.statusPill, { backgroundColor: sc + '18' }]}>
+            <View style={[styles.statusDot, { backgroundColor: sc }]} />
+            <Text style={[styles.statusText, { color: sc }]}>
+              {getStatusLabel(asset.status)}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -67,24 +65,22 @@ export function AssetBentoCard({ asset, onPress }: AssetBentoCardProps) {
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 20, padding: 14, gap: 3 },
+  card: { borderRadius: 20, padding: 14, gap: 3, position: 'relative', },
   cardFull: { width: '100%' },
   cardHalf: { width: '49%', aspectRatio: 1.15 },
   topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    transform: [{ rotate: '-45deg' }],
     alignItems: 'center',
-    marginBottom: 8,
+    position: 'absolute',
+    top: 0,
+    right: 0,
   },
-  iconCircle: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+  content: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
-  name: { fontSize: 14, fontWeight: '700', lineHeight: 19 },
-  id: { fontSize: 10, fontWeight: '600', letterSpacing: 0.6 },
+  name: { fontSize: 18, fontWeight: '900', lineHeight: 22 },
+  id: { fontSize: 12, fontWeight: '600', letterSpacing: 0.6, paddingBottom: 12 },
   location: { fontSize: 11, marginTop: 1 },
   footer: { marginTop: 10 },
   statusPill: {
