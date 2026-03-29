@@ -1,16 +1,11 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import Animated, {
-  useAnimatedProps,
-  useAnimatedReaction,
-  runOnJS,
-  useDerivedValue,
-  type SharedValue,
-} from 'react-native-reanimated';
+import Animated, { type SharedValue } from 'react-native-reanimated';
 import { useThemeColors } from '@/src/shared/theme';
+import { useMetricGauge } from '../lib/useMetricGauge';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 const SIZE = 100;
 const CX = 50;
@@ -19,7 +14,6 @@ const RADIUS = 36;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const ARC_FRACTION = 0.75;
 const TOTAL_ARC = CIRCUMFERENCE * ARC_FRACTION;
-const GAP = CIRCUMFERENCE - TOTAL_ARC;
 const ROTATION = 135;
 
 interface MetricGaugeProps {
@@ -44,49 +38,18 @@ export function MetricGauge({
   criticalThreshold,
 }: MetricGaugeProps) {
   const colors = useThemeColors();
-  const [displayValue, setDisplayValue] = useState((min + max) / 2);
-  const [statusColor, setStatusColor] = useState(color);
 
-  const fraction = useDerivedValue(() => {
-    'worklet';
-    const f = (value.value - min) / (max - min);
-    return Math.max(0, Math.min(1, f));
+  const { animatedCircleProps, textProps, animatedUnitStyle } = useMetricGauge({
+    value,
+    min,
+    max,
+    unit,
+    color,
+    warningThreshold,
+    criticalThreshold,
+    CIRCUMFERENCE,
+    TOTAL_ARC,
   });
-
-  const animatedProps = useAnimatedProps(() => {
-    'worklet';
-    const filled = fraction.value * TOTAL_ARC;
-    return {
-      strokeDashoffset: TOTAL_ARC - filled,
-    };
-  });
-
-  useAnimatedReaction(
-    () => value.value,
-    (current) => {
-      runOnJS(setDisplayValue)(current);
-    },
-  );
-
-  useAnimatedReaction(
-    () => value.value,
-    (current) => {
-      if (criticalThreshold !== undefined && current >= criticalThreshold) {
-        runOnJS(setStatusColor)(colors.status.error);
-      } else if (warningThreshold !== undefined && current >= warningThreshold) {
-        runOnJS(setStatusColor)(colors.status.warning);
-      } else {
-        runOnJS(setStatusColor)(color);
-      }
-    },
-  );
-
-  const formattedValue =
-    unit === 'RPM'
-      ? `${Math.round(displayValue)}`
-      : unit === 'bar'
-        ? displayValue.toFixed(1)
-        : displayValue.toFixed(1);
 
   return (
     <View style={styles.container}>
@@ -102,7 +65,7 @@ export function MetricGauge({
             fill="none"
             stroke={colors.neutral.gray200}
             strokeWidth={7}
-            strokeDasharray={[TOTAL_ARC, GAP]}
+            strokeDasharray={`${TOTAL_ARC} ${CIRCUMFERENCE}`}
             strokeLinecap="round"
             transform={`rotate(${ROTATION}, ${CX}, ${CY})`}
           />
@@ -111,17 +74,20 @@ export function MetricGauge({
             cy={CY}
             r={RADIUS}
             fill="none"
-            stroke={statusColor}
             strokeWidth={7}
-            strokeDasharray={[TOTAL_ARC, GAP]}
+            strokeDasharray={`${CIRCUMFERENCE} ${CIRCUMFERENCE}`}
             strokeLinecap="round"
             transform={`rotate(${ROTATION}, ${CX}, ${CY})`}
-            animatedProps={animatedProps}
+            animatedProps={animatedCircleProps}
           />
         </Svg>
         <View style={styles.valueOverlay} pointerEvents="none">
-          <Text style={[styles.value, { color: colors.text.primary }]}>{formattedValue}</Text>
-          <Text style={[styles.unit, { color: statusColor + '99' }]}>{unit}</Text>
+          <AnimatedTextInput
+            editable={false}
+            animatedProps={textProps}
+            style={[styles.value, { color: colors.text.primary, padding: 0, margin: 0, textAlign: 'center' }]}
+          />
+          <Animated.Text style={[styles.unit, animatedUnitStyle]}>{unit}</Animated.Text>
         </View>
       </View>
       <Text style={[styles.label, { color: colors.text.secondary }]}>{label}</Text>
