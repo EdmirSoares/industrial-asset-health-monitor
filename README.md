@@ -1,5 +1,11 @@
 # Industrial Asset Health Monitor
 
+![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=D04A37)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Reanimated](https://img.shields.io/badge/reanimated-%23000000.svg?style=for-the-badge&logo=react&logoColor=white)
+![Zustand](https://img.shields.io/badge/zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=white)
+
 Aplicativo para monitoramento preditivo e telemetria de ativos industriais em tempo real, criado em React Native e Expo.
 
 ## Arquitetura (Feature-Sliced Design)
