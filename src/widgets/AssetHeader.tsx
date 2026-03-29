@@ -1,16 +1,11 @@
 import { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors } from '@/src/shared/theme';
 import { AssetStatus } from '@/src/entities/asset/model/types';
 import { getStatusLabel } from '@/src/shared/lib/formatters';
+import { usePulseAnimation } from '@/src/shared/lib/hooks/usePulseAnimation';
 
 interface AssetHeaderProps {
   assetId: string;
@@ -21,7 +16,6 @@ interface AssetHeaderProps {
 
 export function AssetHeader({ assetId, location, status, onBack }: AssetHeaderProps) {
   const colors = useThemeColors();
-  const pulseOpacity = useSharedValue(1);
 
   const statusColorMap: Record<AssetStatus, string> = {
     normal: colors.status.success,
@@ -32,14 +26,7 @@ export function AssetHeader({ assetId, location, status, onBack }: AssetHeaderPr
 
   const statusColor = statusColorMap[status];
 
-  useEffect(() => {
-    pulseOpacity.value = withRepeat(
-      withSequence(withTiming(0.25, { duration: 700 }), withTiming(1, { duration: 700 })),
-      -1,
-    );
-  }, []);
-
-  const pulseStyle = useAnimatedStyle(() => ({ opacity: pulseOpacity.value }));
+  const pulseStyle = usePulseAnimation();
 
   return (
     <View style={styles.container}>
