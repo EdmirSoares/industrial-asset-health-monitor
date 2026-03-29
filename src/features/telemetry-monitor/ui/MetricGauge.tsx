@@ -121,7 +121,7 @@ export function MetricGauge({
         </Svg>
         <View style={styles.valueOverlay} pointerEvents="none">
           <Text style={[styles.value, { color: colors.text.primary }]}>{formattedValue}</Text>
-          <Text style={[styles.unit, { color: colors.text.secondary }]}>{unit}</Text>
+          <Text style={[styles.unit, { color: statusColor + '99' }]}>{unit}</Text>
         </View>
       </View>
       <Text style={[styles.label, { color: colors.text.secondary }]}>{label}</Text>
@@ -130,15 +130,15 @@ export function MetricGauge({
 }
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center', gap: 4 },
+  container: { alignItems: 'center', justifyContent: 'space-between', gap: 8 },
   svgWrapper: { width: SIZE, height: SIZE, position: 'relative' },
   valueOverlay: {
     ...StyleSheet.absoluteFillObject,
+    paddingTop: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 8,
   },
   value: { fontSize: 18, fontWeight: '700', lineHeight: 22 },
-  unit: { fontSize: 10, fontWeight: '500' },
-  label: { fontSize: 12, fontWeight: '500', textAlign: 'center' },
+  unit: { fontSize: 12, fontWeight: '600' },
+  label: { fontSize: 12, fontWeight: '700', textAlign: 'center' },
 });
