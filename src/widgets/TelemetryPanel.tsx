@@ -35,12 +35,12 @@ export function TelemetryPanel({ assetId }: TelemetryPanelProps) {
             Vibração em Tempo Real
           </Text>
           {lastUpdated && (
-            <Text style={[styles.timestamp, { color: colors.text.disabled }]}>
+            <Text style={[styles.timestamp, { color: colors.text.secondary }]}>
               {formatTime(lastUpdated)}
             </Text>
           )}
           {loading && (
-            <Text style={[styles.timestamp, { color: colors.text.disabled }]}>
+            <Text style={[styles.timestamp, { color: colors.text.secondary }]}>
               Atualizando…
             </Text>
           )}
@@ -51,10 +51,10 @@ export function TelemetryPanel({ assetId }: TelemetryPanelProps) {
           color={colors.feature.telemetry.primary}
         />
         <View style={styles.chartFooter}>
-          <Text style={[styles.chartFooterLabel, { color: colors.text.disabled }]}>
+          <Text style={[styles.chartFooterLabel, { color: colors.text.secondary }]}>
             {SENSOR_CONFIG.vibration.min} Hz
           </Text>
-          <Text style={[styles.chartFooterLabel, { color: colors.text.disabled }]}>
+          <Text style={[styles.chartFooterLabel, { color: colors.text.secondary }]}>
             {SENSOR_CONFIG.vibration.max} Hz
           </Text>
         </View>
@@ -121,10 +121,10 @@ const styles = StyleSheet.create({
   container: { gap: 8 },
   card: { borderRadius: 16, padding: 12 },
   cardHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
-  cardTitle: { flex: 1, fontSize: 15, fontWeight: '600' },
-  timestamp: { fontSize: 10 },
+  cardTitle: { flex: 1, fontSize: 16, fontWeight: '600' },
+  timestamp: { fontSize: 12 },
   chartFooter: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
-  chartFooterLabel: { fontSize: 10 },
+  chartFooterLabel: { fontSize: 12 },
   gaugeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   gaugeCard: {
     flex: 1,
