@@ -7,6 +7,7 @@
 ![Zustand](https://img.shields.io/badge/zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=white)
 
 Aplicativo para monitoramento preditivo e telemetria de ativos industriais em tempo real, criado em React Native e Expo.
+
 ![GravaodeTela2026-03-29s00 34 21-ezgif com-resize](https://github.com/user-attachments/assets/64f7cf86-5453-4842-99ab-113d662d6687)
 ![GravaodeTela2026-03-29s00 34 21-ezgif com-optimize](https://github.com/user-attachments/assets/4beb1d88-e938-491b-9e37-6ca6566bf8e3)
 ![GravaodeTela2026-03-29s00 34 21-ezgif com-optimize-2](https://github.com/user-attachments/assets/430ef68d-814e-4612-b2f4-57315b7251ef)
