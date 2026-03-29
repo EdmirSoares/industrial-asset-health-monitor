@@ -13,14 +13,13 @@ import { AssetStatus } from '@/src/entities/asset/model/types';
 import { getStatusLabel } from '@/src/shared/lib/formatters';
 
 interface AssetHeaderProps {
-  name: string;
   assetId: string;
   location?: string;
   status: AssetStatus;
   onBack: () => void;
 }
 
-export function AssetHeader({ name, assetId, location, status, onBack }: AssetHeaderProps) {
+export function AssetHeader({ assetId, location, status, onBack }: AssetHeaderProps) {
   const colors = useThemeColors();
   const pulseOpacity = useSharedValue(1);
 
@@ -52,9 +51,6 @@ export function AssetHeader({ name, assetId, location, status, onBack }: AssetHe
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <Text style={[styles.name, { color: colors.text.primary }]} numberOfLines={1}>
-          {name}
-        </Text>
         <Text style={[styles.id, { color: colors.text.secondary }]}>ID: {assetId}</Text>
         {location ? (
           <Text style={[styles.location, { color: colors.text.disabled }]}>{location}</Text>
@@ -77,6 +73,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingTop: 48,
     paddingHorizontal: 14,
     paddingVertical: 10,
     gap: 10,
@@ -84,9 +81,9 @@ const styles = StyleSheet.create({
   backButton: { padding: 4 },
   content: { flex: 1 },
   name: { fontSize: 19, fontWeight: '700', marginBottom: 1 },
-  id: { fontSize: 13 },
+  id: { fontSize: 24, fontWeight: '700' },
   location: { fontSize: 12, marginTop: 1 },
-  statusBlock: { alignItems: 'center', gap: 5 },
+  statusBlock: { alignItems: 'center', gap: 8, flexDirection: 'row' },
   statusDot: { width: 10, height: 10, borderRadius: 5 },
   statusLabel: { fontSize: 10, fontWeight: '700', letterSpacing: 0.4 },
 });
