@@ -1,10 +1,11 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors, useThemeShadows } from '@/src/shared/theme';
 import { Asset, AssetStatus } from '../model/types';
 import { StatusBadge } from '@/src/shared/ui/StatusBadge';
 import { formatDate } from '@/src/shared/lib/formatters';
+import { useAssetCardAnimation } from '../lib/useAssetCardAnimation';
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -23,11 +24,8 @@ const STATUS_ICON: Record<AssetStatus, string> = {
 export function AssetCard({ asset, onPress }: AssetCardProps) {
   const colors = useThemeColors();
   const shadows = useThemeShadows();
-  const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+  const { animatedStyle, onPressIn, onPressOut } = useAssetCardAnimation();
 
   const statusColorMap: Record<AssetStatus, string> = {
     normal: colors.status.success,
@@ -44,12 +42,8 @@ export function AssetCard({ asset, onPress }: AssetCardProps) {
         { backgroundColor: colors.background.primary, ...shadows.md },
       ]}
       onPress={onPress}
-      onPressIn={() => {
-        scale.value = withSpring(0.97, { damping: 15 });
-      }}
-      onPressOut={() => {
-        scale.value = withSpring(1, { damping: 15 });
-      }}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
       activeOpacity={1}>
       <View style={styles.row}>
         <View style={styles.info}>
