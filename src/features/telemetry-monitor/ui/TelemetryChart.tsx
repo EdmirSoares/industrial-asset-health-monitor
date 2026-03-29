@@ -1,6 +1,7 @@
 import { View, StyleSheet } from 'react-native';
 import Svg, { Path, Line } from 'react-native-svg';
-import Animated, { useAnimatedProps, type SharedValue } from 'react-native-reanimated';
+import Animated, { type SharedValue } from 'react-native-reanimated';
+import { useTelemetryChart } from '../lib/useTelemetryChart';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
@@ -15,38 +16,7 @@ interface TelemetryChartProps {
 }
 
 export function TelemetryChart({ history, maxValue = 100, color = '#00E5FF' }: TelemetryChartProps) {
-  const animatedFillProps = useAnimatedProps(() => {
-    'worklet';
-    const pts = history.value;
-    if (pts.length < 2) return { d: '' };
-
-    const n = pts.length;
-    let d = '';
-    for (let i = 0; i < n; i++) {
-      const x = (i / (n - 1)) * CHART_W;
-      const normalized = pts[i] / maxValue;
-      const y = CHART_H - PADDING_V - normalized * (CHART_H - PADDING_V * 2);
-      d += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
-    }
-    d += ` L ${CHART_W} ${CHART_H} L 0 ${CHART_H} Z`;
-    return { d };
-  });
-
-  const animatedLineProps = useAnimatedProps(() => {
-    'worklet';
-    const pts = history.value;
-    if (pts.length < 2) return { d: '' };
-
-    const n = pts.length;
-    let d = '';
-    for (let i = 0; i < n; i++) {
-      const x = (i / (n - 1)) * CHART_W;
-      const normalized = pts[i] / maxValue;
-      const y = CHART_H - PADDING_V - normalized * (CHART_H - PADDING_V * 2);
-      d += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
-    }
-    return { d };
-  });
+  const { animatedFillProps, animatedLineProps } = useTelemetryChart(history, maxValue, CHART_W, CHART_H, PADDING_V);
 
   const gridY25 = CHART_H - PADDING_V - 0.25 * (CHART_H - PADDING_V * 2);
   const gridY50 = CHART_H - PADDING_V - 0.5 * (CHART_H - PADDING_V * 2);
