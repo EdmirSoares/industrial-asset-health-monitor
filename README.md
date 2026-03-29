@@ -12,12 +12,17 @@ Aplicativo para monitoramento preditivo e telemetria de ativos industriais em te
 
 O projeto estrutura-se visando escalabilidade e separação cristalina entre Lógica e Interface de Usuário (UI):
 
-- **app**: Roteamento por sistema de arquivos (Expo Router).
-- **src/features**: Lógicas de negócio (Monitoramento de Telemetria, Diagnóstico via IA, Scanner de QR Code).
-- **src/entities**: Definição de modelos centrais (Ativos Industriais).
-- **src/widgets**: Componentes estruturais e complexos da tela (Tabelas de dados, Dashboards).
-- **src/shared**: Funcionalidades universais (Configuração de tema, formatação, utilitários).
-  A totalidade das lógicas das frentes operacionais atua em hooks dedicados (dentro das pastas `lib/`), limitando as views (`.tsx`) unicamente a marcação e exibição.
+```text
+industrial-asset-monitor/
+├── app/          # Roteamento nativo por sistema de arquivos (Expo Router)
+└── src/
+    ├── features/ # Lógicas de negócio (Monitoramento de Telemetria, Scanner QR, Diagnóstico IA)
+    ├── entities/ # Definição de modelos centrais e interfaces de tipo (ex: Ativos)
+    ├── widgets/  # Componentes estruturais compostos da tela (Tabelas e Dashboards)
+    └── shared/   # Funcionalidades globais (configuração de tema, animações e UI local)
+```
+
+A totalidade das lógicas de animação e requisições residem em hooks dedicados localizados nas pastas `lib/`, limitando os arquivos de visão (`.tsx`) unicamente à declaração da interface (dumb components).
 
 ## Design e Experiência de Uso (UX)
 
