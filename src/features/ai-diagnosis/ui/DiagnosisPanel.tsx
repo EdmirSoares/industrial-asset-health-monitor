@@ -1,15 +1,10 @@
-import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors, useThemeMode } from '@/src/shared/theme';
 import { SOFT_SHADOW } from '@/src/shared/ui/shadows';
-import { getDiagnosis, type DiagnosisResult } from '../api/getDiagnosis';
+import { useDiagnosis } from '../lib/useDiagnosis';
+import { useSkeletonAnimation } from '@/src/shared/lib/hooks/useSkeletonAnimation';
 
 interface DiagnosisPanelProps {
   assetId: string;
@@ -19,34 +14,9 @@ export function DiagnosisPanel({ assetId }: DiagnosisPanelProps) {
   const colors = useThemeColors();
   const mode = useThemeMode();
   const cardBg = mode === 'dark' ? colors.background.darkCard : colors.background.primary;
-  const [loading, setLoading] = useState(true);
-  const [result, setResult] = useState<DiagnosisResult | null>(null);
-  const [error, setError] = useState(false);
 
-  const skeletonOpacity = useSharedValue(0.4);
-  const skeletonStyle = useAnimatedStyle(() => ({ opacity: skeletonOpacity.value }));
-
-  useEffect(() => {
-    skeletonOpacity.value = withRepeat(withTiming(1, { duration: 700 }), -1, true);
-  }, []);
-
-  const load = () => {
-    setLoading(true);
-    setError(false);
-    getDiagnosis(assetId)
-      .then((data) => {
-        setResult(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError(true);
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    load();
-  }, [assetId]);
+  const { loading, result, error, load } = useDiagnosis(assetId);
+  const skeletonStyle = useSkeletonAnimation();
 
   const aiColor = colors.feature.ai.primary;
 
