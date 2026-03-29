@@ -8,6 +8,7 @@ import { ASSET_ICON } from '../model/mockAssets';
 
 interface AssetBentoCardProps {
   asset: Asset;
+  isFullWidth?: boolean;
   onPress: () => void;
 }
 
@@ -18,21 +19,25 @@ function statusColor(status: AssetStatus, colors: ReturnType<typeof useThemeColo
   return colors.neutral.gray500;
 }
 
-export function AssetBentoCard({ asset, onPress }: AssetBentoCardProps) {
+export function AssetBentoCard({ asset, isFullWidth, onPress }: AssetBentoCardProps) {
   const colors = useThemeColors();
   const mode = useThemeMode();
   const cardBg = mode === 'dark' ? colors.background.darkCard : colors.background.primary;
 
   const sc = statusColor(asset.status, colors);
-  const isFull = asset.status === 'critical';
+  const isFull = isFullWidth ?? false;
   const icon = (ASSET_ICON[asset.type ?? 'generic'] ?? 'cube') as any;
 
   return (
     <TouchableOpacity
-      style={[styles.card, isFull ? styles.cardFull : styles.cardHalf, { backgroundColor: cardBg }, SOFT_SHADOW]}
+      style={[
+        styles.card,
+        isFull ? styles.cardFull : styles.cardHalf,
+        { backgroundColor: cardBg },
+        SOFT_SHADOW,
+      ]}
       onPress={onPress}
       activeOpacity={0.82}>
-
       <View style={styles.topRow}>
         <Feather name="chevron-right" size={48} color={colors.primary.main + '40'} />
       </View>
@@ -41,9 +46,7 @@ export function AssetBentoCard({ asset, onPress }: AssetBentoCardProps) {
           {asset.name}
         </Text>
 
-        <Text style={[styles.id, { color: colors.text.primary + '80' }]}>
-          {asset.id}
-        </Text>
+        <Text style={[styles.id, { color: colors.text.primary + '80' }]}>{asset.id}</Text>
 
         {isFull && asset.location ? (
           <Text style={[styles.location, { color: colors.text.secondary }]} numberOfLines={1}>
@@ -54,9 +57,7 @@ export function AssetBentoCard({ asset, onPress }: AssetBentoCardProps) {
         <View style={styles.footer}>
           <View style={[styles.statusPill, { backgroundColor: sc + '18' }]}>
             <View style={[styles.statusDot, { backgroundColor: sc }]} />
-            <Text style={[styles.statusText, { color: sc }]}>
-              {getStatusLabel(asset.status)}
-            </Text>
+            <Text style={[styles.statusText, { color: sc }]}>{getStatusLabel(asset.status)}</Text>
           </View>
         </View>
       </View>
@@ -65,9 +66,9 @@ export function AssetBentoCard({ asset, onPress }: AssetBentoCardProps) {
 }
 
 const styles = StyleSheet.create({
-  card: { borderRadius: 20, padding: 14, gap: 3, position: 'relative', },
-  cardFull: { width: '100%' },
-  cardHalf: { width: '49%', aspectRatio: 1.15 },
+  card: { borderRadius: 20, padding: 14, gap: 3, position: 'relative' },
+  cardFull: { flex: 1 },
+  cardHalf: { flex: 1, minWidth: '45%', aspectRatio: 1.15 },
   topRow: {
     transform: [{ rotate: '-45deg' }],
     alignItems: 'center',

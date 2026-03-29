@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Text, StyleSheet } from 'react-native';
 import { useThemeColors } from '@/src/shared/theme';
 import { Asset } from '@/src/entities/asset/model/types';
 import { AssetBentoCard } from '@/src/entities/asset/ui/AssetBentoCard';
@@ -18,15 +18,24 @@ export function AssetBentoGrid({ assets, onAssetPress }: AssetBentoGridProps) {
         <View style={[styles.sectionLine, { backgroundColor: colors.border.light }]} />
       </View>
 
-      <View style={styles.grid}>
-        {assets.map((asset) => (
-          <AssetBentoCard
-            key={asset.id}
-            asset={asset}
-            onPress={() => onAssetPress(asset.id)}
-          />
-        ))}
-      </View>
+      <FlatList
+        data={assets}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        scrollEnabled={false}
+        columnWrapperStyle={styles.row}
+        contentContainerStyle={styles.listContent}
+        renderItem={({ item, index }) => {
+          const isOddLast = assets.length % 2 !== 0 && index === assets.length - 1;
+          return (
+            <AssetBentoCard
+              asset={item}
+              isFullWidth={isOddLast}
+              onPress={() => onAssetPress(item.id)}
+            />
+          );
+        }}
+      />
     </View>
   );
 }
@@ -42,5 +51,6 @@ const styles = StyleSheet.create({
   },
   sectionLabel: { fontSize: 12, fontWeight: '700', letterSpacing: 1.4 },
   sectionLine: { flex: 1, height: 1 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  row: { gap: 8 },
+  listContent: { gap: 8 },
 });
