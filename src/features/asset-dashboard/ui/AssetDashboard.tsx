@@ -18,7 +18,6 @@ export default function AssetDashboard() {
   const legacyAsset = useAssetStore((state) => state.asset);
 
   const assetId = (id as string) ?? '';
-  const assetName = currentAsset?.name ?? legacyAsset?.name ?? 'Ativo Desconhecido';
   const assetStatus: AssetStatus = currentAsset?.status ?? 'normal';
   const assetLocation = currentAsset?.location;
 
@@ -26,7 +25,6 @@ export default function AssetDashboard() {
     <SafeAreaView style={[styles.safe, { backgroundColor: colors.background.secondary }]}>
       <Animated.View entering={FadeInDown.duration(250)}>
         <AssetHeader
-          name={assetName}
           assetId={assetId}
           location={assetLocation}
           status={assetStatus}

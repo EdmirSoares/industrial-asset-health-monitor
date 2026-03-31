@@ -1,16 +1,7 @@
-import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
-import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
-import { useAssetStore } from '@/src/entities/asset/model/store';
-import useCamera from '../model/useCamera';
+import Animated from 'react-native-reanimated';
+import { useScanScreen } from '../lib/useScanScreen';
 
 let Camera: any = null;
 try {
@@ -24,36 +15,14 @@ const CORNER = 40;
 const ACCENT = '#00E5FF';
 
 export default function ScanScreen() {
-  const router = useRouter();
-  const setAsset = useAssetStore((state) => state.setAsset);
-  const { isAvailable, hasPermission, device, cameraRef, codeScanner, scannedCode, isActive, isDeviceLoading } =
-    useCamera();
-
-  const [manualId, setManualId] = useState('');
-
-  const laserY = useSharedValue(0);
-  useEffect(() => {
-    laserY.value = withRepeat(
-      withTiming(SCAN_BOX - 4, { duration: 1800, easing: Easing.linear }),
-      -1,
-      true,
-    );
-  }, []);
-  const laserStyle = useAnimatedStyle(() => ({ transform: [{ translateY: laserY.value }] }));
-
-  useEffect(() => {
-    if (scannedCode) {
-      setAsset({ id: scannedCode, name: `Ativo #${scannedCode.slice(-4)}`, threshold: 80 });
-      router.push(`/asset/${scannedCode}`);
-    }
-  }, [scannedCode]);
-
-  const handleManualSubmit = () => {
-    const id = manualId.trim();
-    if (!id) return;
-    setAsset({ id, name: `Ativo #${id.slice(-4)}`, threshold: 80 });
-    router.push(`/asset/${id}`);
-  };
+  const {
+    router,
+    manualId,
+    setManualId,
+    laserStyle,
+    handleManualSubmit,
+    cameraState: { isAvailable, hasPermission, device, cameraRef, codeScanner, isActive, isDeviceLoading }
+  } = useScanScreen(SCAN_BOX);
 
   if (!isAvailable) {
     return (
